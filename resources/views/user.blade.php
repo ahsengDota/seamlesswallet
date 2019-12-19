@@ -1,0 +1,267 @@
+@extends('layouts.app')
+
+@section('content')
+
+<section class="content-header">
+    <h1>
+        User Management
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">User List</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+<!-- Main row -->
+<div class="row">
+    <!-- Left col -->
+    <section class="col-lg-12 connectedSortable">
+        <!-- Chat box -->
+        <div class="box box-success">
+            <div class="box-header">
+                <i class="fa fa-comments-o"></i>
+
+                <h3 class="box-title">User List</h3>
+
+                <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
+                    <div class="btn-group" data-toggle="btn-toggle">
+                        <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body chat">
+                <div class="row">
+                    <div class="col-md-8">
+                        <form class="form-inline" action="">
+                            <div class="form-group">
+                                Date From :<br>
+                                <input type="date" class="form-control" id="date-from"/>
+                            </div>
+                            <div class="form-group">
+                                Date To :<br>
+                                <input type="date" class="form-control" id="date-to"/>
+                            </div>
+                            <div class="form-group">
+                                <br>
+                                <!-- <button type="button" class="btn btn-primary" onclick="download_pdf()" style="width:100px;">Download</button> -->
+                                <button type="button" class="btn btn-success" onclick="search()" style="width:100px;">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12">
+                        <br>
+                        <button class="btn btn-sm btn-warning" onclick="change_date('today')">Today</button>
+                        <button class="btn btn-sm btn-success" onclick="change_date('yesterday')">Yesterday</button>
+                        <button class="btn btn-sm btn-primary" onclick="change_date('this_week')">This Week</button>
+                        <button class="btn btn-sm btn-danger" onclick="change_date('last_week')">Last Week</button>
+                        <button class="btn btn-sm btn-info" onclick="change_date('this_month')">This Month</button>
+                        <button class="btn btn-sm btn-secondary" onclick="change_date('last_month')">Last Month</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <table id="example1" class="display table table-stripped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">#</th>
+                                    <th style="text-align:center;">Name</th>
+                                    <th style="text-align:center;">Email Address</th>
+                                    <th style="text-align:center;">Phone No</th>
+                                    <th style="text-align:center;">Status</th>
+                                    <th style="text-align:center;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($userArr as $key=> $user)
+                                <tr>
+                                    <td width="5">{{$key+1}}</td>
+                                    <td>{{$user['name']}}</td>
+                                    <td>{{$user['email']}}</td>
+                                    <td>{{$user['phone_number']}}</td>
+                                    <td width="100"><button class="btn btn-sm btn-success" style="width:100px;">{{$user['status']}}</button></td>
+                                    <td width="100"><button class="btn btn-sm btn-warning" style="width:100px;" data-toggle="modal" data-target="#walletSummary{{$key+1}}">View Wallet</button></td>
+                                </tr>
+
+                                <!-- Modal -->
+                                <div id="walletSummary{{$key+1}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Wallet Summary</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <br>
+                                                ASC Sportsbook : RM{{$user['balance']}} <br>
+                                                EVO Casino : <img src="https://i.gifer.com/ZZ5H.gif" height="20" width="20"> <br>
+                                                ABC Casino : <img src="https://i.gifer.com/ZZ5H.gif" height="20" width="20"> <br>
+                                                DEF Casino : <img src="https://i.gifer.com/ZZ5H.gif" height="20" width="20"> <br>
+                                                GHI Casino : <img src="https://i.gifer.com/ZZ5H.gif" height="20" width="20"> <br>
+                                                JKL Casino : <img src="https://i.gifer.com/ZZ5H.gif" height="20" width="20"> <br>
+                                                MNO Casino : <img src="https://i.gifer.com/ZZ5H.gif" height="20" width="20"> <br>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" style="width:100px;">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                @endforeach
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<script>
+    function search(date_from,date_to)
+    {
+        var date_from = $('#date-from').val();
+        var date_to   = $('#date-to').val();
+
+        $.ajax({
+            type: "POST",
+            url: "",
+            data:
+            {
+                date_from : date_from,
+                date_to : date_to,
+            },
+            beforeSend: function()
+            {
+                $("#loader-image").show();
+            },
+            success: function( data )
+            {
+                $("#loader-image").hide();
+
+                $("#panel-content").html(data);
+            }
+        });
+    }
+
+    function change_date(date)
+    {
+        //today
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+
+        //yesterday
+        var yesterday = new Date();
+        var yes_dd = String(yesterday.getDate()-1).padStart(2, '0');
+        var yes_mm = String(yesterday.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yes_yyyy = yesterday.getFullYear();
+        yesterday = yes_yyyy + '-' + yes_mm + '-' + yes_dd;
+
+        //this week
+        var dt = new Date(); // current date of week
+        var currentWeekDay = dt.getDay();
+        var lessDays = currentWeekDay == 0 ? 6 : currentWeekDay - 1;
+        var wkStart = new Date(new Date(dt).setDate(dt.getDate() - lessDays));
+        var wkEnd = new Date(new Date(wkStart).setDate(wkStart.getDate() + 6));
+
+        firstDay = wkStart.getFullYear() + "-" + (wkStart.getMonth() + 1) + "-" + wkStart.getDate();
+        lastDay = wkEnd.getFullYear() + "-" + (wkEnd.getMonth() + 1) + "-" + wkEnd.getDate();
+
+        //last week
+        var lastWeek_firstday = new Date(wkStart.getFullYear(), wkStart.getMonth(), wkStart.getDate() - 7);
+        var lastWeekMonth_firstday = String(lastWeek_firstday.getMonth() + 1).padStart(2, '0');
+        var lastWeekDay_firstday = String(lastWeek_firstday.getDate()).padStart(2, '0');
+        var lastWeekYear_firstday = lastWeek_firstday.getFullYear();
+
+        var lastWeek_lastday = new Date(wkStart.getFullYear(), wkStart.getMonth(), wkStart.getDate() - 1);
+        var lastWeekMonth_lastday = String(lastWeek_lastday.getMonth() + 1).padStart(2, '0');
+        var lastWeekDay_lastday = String(lastWeek_lastday.getDate()).padStart(2, '0');
+        var lastWeekYear_lastday = lastWeek_lastday.getFullYear();
+
+        lastweek_firstDay = lastWeekYear_firstday + "-" + lastWeekMonth_firstday + "-" + lastWeekDay_firstday;
+        lastweek_lastDay = lastWeekYear_lastday + "-" + lastWeekMonth_lastday + "-" + lastWeekDay_lastday;
+
+        //this month
+        var this_month = new Date();
+        var first_thismonth = new Date(this_month.getFullYear(), this_month.getMonth(), 1);
+        var thismonth_fisrtday_month = String(first_thismonth.getMonth() + 1).padStart(2, '0');
+        var thismonth_fisrtday_day = String(first_thismonth.getDate()).padStart(2, '0');
+        var thismonth_fisrtday_year = first_thismonth.getFullYear();
+
+        var last_thismonth = new Date(this_month.getFullYear(), this_month.getMonth() + 1, 0);
+        var thismonth_lastday_month = String(last_thismonth.getMonth() + 1).padStart(2, '0');
+        var thismonth_lastday_day = String(last_thismonth.getDate()).padStart(2, '0');
+        var thismonth_lastday_year = last_thismonth.getFullYear();
+
+        thismonth_firstDay = thismonth_fisrtday_year + "-" + thismonth_fisrtday_month + "-" + thismonth_fisrtday_day;
+        thismonth_lastDay = thismonth_lastday_year + "-" + thismonth_lastday_month + "-" + thismonth_lastday_day;
+
+        //last month
+        var last_month = new Date();
+        var first_lastmonth = new Date(last_month.getFullYear(), last_month.getMonth()-1, 1);
+        var lastmonth_fisrtday_month = String(first_lastmonth.getMonth() + 1).padStart(2, '0');
+        var lastmonth_fisrtday_day = String(first_lastmonth.getDate()).padStart(2, '0');
+        var lastmonth_fisrtday_year = first_lastmonth.getFullYear();
+
+        var last_lastmonth = new Date(last_month.getFullYear(), last_month.getMonth() - 1, 1);
+        var lastmonth_lastday_month = String(last_lastmonth.getMonth() + 1).padStart(2, '0');
+        var lastmonth_lastday_day = String(last_lastmonth.getDate()).padStart(2, '0');
+        var lastmonth_lastday_year = last_lastmonth.getFullYear();
+
+        lastmonth_firstDay = lastmonth_fisrtday_year + "-" + lastmonth_fisrtday_month + "-" + lastmonth_fisrtday_day;
+        lastmonth_lastDay = lastmonth_lastday_year + "-" + lastmonth_lastday_month + "-" + lastmonth_lastday_day;
+
+        if(date == 'today')
+        {
+            document.getElementById("date-from").value = today;
+            document.getElementById("date-to").value = today;
+        }
+        else if(date == 'yesterday')
+        {
+            document.getElementById("date-from").value = yesterday;
+            document.getElementById("date-to").value = yesterday;
+        }
+        else if(date == 'this_week')
+        {
+            document.getElementById("date-from").value = firstDay;
+            document.getElementById("date-to").value = lastDay;
+        }
+        else if(date == 'last_week')
+        {
+            document.getElementById("date-from").value = lastweek_firstDay;
+            document.getElementById("date-to").value = lastweek_lastDay;
+        }
+        else if(date == 'this_month')
+        {
+            document.getElementById("date-from").value = thismonth_firstDay;
+            document.getElementById("date-to").value = thismonth_lastDay;
+        }
+        else if(date == 'last_month')
+        {
+            document.getElementById("date-from").value = lastmonth_firstDay;
+            document.getElementById("date-to").value = lastmonth_lastDay;
+        }
+    }
+</script>
+@endsection
