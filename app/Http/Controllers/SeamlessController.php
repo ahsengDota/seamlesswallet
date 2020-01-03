@@ -17,10 +17,12 @@ class SeamlessController extends Controller
         DB::Begintransaction();
         try
         {
+            // $request->session()->token();
             //get json from game provider
             $amount = $Request->Amount;
             $account= trim($Request->strAccount);
             $refId  = $Request->RefID;
+
             //$token  = $Request->token;
 
             $db = DB::SELECT("SELECT balance FROM users WHERE name = ?",array($account));

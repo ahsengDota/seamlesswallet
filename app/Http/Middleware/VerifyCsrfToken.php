@@ -12,6 +12,12 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        'http://172.30.30.75/PostBetAmount',
+        'http://172.30.30.75/PostStatusAmount',
+        'http://172.30.30.75/PostResultAmount',
+        'http://172.30.30.75/getBalance',
+        'http://172.30.30.75/Rollback',
+        'http://172.30.30.75/Retry',
+        'http://172.30.30.75/Register',
     ];
 }

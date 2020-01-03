@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+
     public function userList()
     {
         $db = DB::table("users")->get();
@@ -211,7 +216,7 @@ class UserController extends Controller
         bool MinTeamID
         *********************/
     }
-    
+
     public function getmatchresult()
     {
         /*********************
